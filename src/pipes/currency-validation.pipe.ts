@@ -6,7 +6,7 @@ export class CurrencyValidationPipe implements PipeTransform {
 
   transform(value: GetMoneyExchangeDto, metadata: ArgumentMetadata) {
     if (value.currency === value.currencyTo) {
-      throw new BadRequestException('The coins cannot be the same')
+      throw new BadRequestException('The coins cannot be the same');
     }
 
     return value;

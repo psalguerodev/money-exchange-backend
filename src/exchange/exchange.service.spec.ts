@@ -1,6 +1,6 @@
+import { HttpModule } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExchangeService } from './exchange.service';
-import { HttpService, HttpModule } from '@nestjs/common';
 
 describe('ExchangeService', () => {
   let service: ExchangeService;

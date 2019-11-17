@@ -9,3 +9,12 @@ db:
 
 jwt:
   expiresIn: 3600
+
+apis:
+  exchange:
+    url: https://free.currconv.com/api/v7/convert?q={0}&compact=ultra&apiKey={1}
+    precision: 4
+    default_condition: USD_EUR
+    retry: 2
+    token: d8f6938c3d492ea0d097
+    timeout: 4000

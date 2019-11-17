@@ -3,6 +3,6 @@ import { CurrencyValidationPipe } from './currency-validation.pipe';
 
 @Module({
   providers: [CurrencyValidationPipe],
-  exports: [CurrencyValidationPipe]
+  exports: [CurrencyValidationPipe],
 })
 export class PipesModule {}

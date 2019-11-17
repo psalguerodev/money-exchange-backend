@@ -1,29 +1,41 @@
-import { Injectable, HttpService, Logger } from '@nestjs/common';
-import { map, timeout, catchError, retry } from 'rxjs/operators';
-import { throwError, Observable } from 'rxjs';
+import { HttpService, Injectable, Logger } from '@nestjs/common';
+import * as config from 'config';
+import { throwError } from 'rxjs';
+import { catchError, map, retry, timeout } from 'rxjs/operators';
+import { calculateAmountExchange } from '../utils/calculator.util';
+import { formatString } from '../utils/formater.util';
 import { GetMoneyExchangeDto } from './dto/get-money-exchange.dto';
+import { GetMonenyResponseDto } from './dto/get-money-response.dto';
+
+export interface ExchangeConfig {
+  url: string;
+  retry: number;
+  default_condition: string;
+  token: string;
+  timeout: number;
+  precision: number;
+}
 
 @Injectable()
 export class ExchangeService {
+  private readonly exchangeConfig: ExchangeConfig = config.get('apis.exchange');
 
-  private readonly logger = new Logger(ExchangeService.name);
+  constructor(private readonly http: HttpService) { }
 
-  private readonly API_KEY = 'd8f6938c3d492ea0d097';
-  private readonly TIMEOUT_API = 4000;
-  private condition = 'USD_EUR';
-  private readonly exchangeApi =
-    `https://free.currconv.com/api/v7/convert?q=${this.condition}&compact=ultra&apiKey=${this.API_KEY}`;
+  async getMoneyExchange(getExchangeDto: GetMoneyExchangeDto): Promise<GetMonenyResponseDto> {
+    const condition = `${getExchangeDto.currency}_${getExchangeDto.currencyTo}`;
+    const url = formatString(this.exchangeConfig.url, condition, this.exchangeConfig.token);
 
-  constructor(private readonly http: HttpService) {}
-
-  getMoneyExchange(getExchangeDto: GetMoneyExchangeDto): Observable<object> {
-    this.logger.verbose(`Send request to url ${this.exchangeApi}`);
-    return this.http.get(this.exchangeApi)
+    return this.http.get(url)
       .pipe(
-        timeout(this.TIMEOUT_API),
-        retry(2),
+        timeout(this.exchangeConfig.timeout),
+        retry(this.exchangeConfig.retry),
         map(response => response.data),
-        catchError(error => throwError(error)));
+        map(data => calculateAmountExchange(data[condition], getExchangeDto.amount, this.exchangeConfig.precision)),
+        map(ammountTo =>
+          new GetMonenyResponseDto(getExchangeDto.currency, getExchangeDto.currencyTo, `${getExchangeDto.amount}`, ammountTo)),
+        catchError((error) => throwError(error.message)))
+      .toPromise();
   }
 
 }
