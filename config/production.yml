@@ -1,0 +1,5 @@
+server:
+  origin: 'https://psalguerodev.github.io/money-exchange-frontend/'
+
+db:
+  synchronize: false

@@ -1,0 +1,32 @@
+version: "3"
+services:
+  app:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://developer:developer@postgres:5432/task_managmenent
+      NODE_ENV: development
+      JWT_SECRET: psalguerodev$$
+      RDS_HOST: postgres
+      RDS_PORT: 5432
+      RDS_USERNAME: developer
+      RDS_PASSWORD: developer
+      RDS_DATABASE: task_managmenent
+      TYPEORM_SYNC: 'true'
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    command: yarn start
+    volumes:
+      - .:/money-exchange-api/
+      - /money-exchange-api/node_modules
+
+  postgres:
+    image: postgres:10.4
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: developer
+      POSTGRES_DB: moneyexchange

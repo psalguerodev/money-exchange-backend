@@ -1,0 +1,11 @@
+server:
+  port: 3000
+
+db:
+  host: 'localhost'
+  username: 'developer'
+  password: 'developer'
+  synchronize: true
+
+jwt:
+  secret: '@psalguerodev$$'
