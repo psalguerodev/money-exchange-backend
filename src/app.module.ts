@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ExchangeModule } from './exchange/exchange.module';
-import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { typeOrmConfig } from './config/typeorm.config';
+import { ExchangeModule } from './exchange/exchange.module';
 import { PipesModule } from './pipes/pipes.module';
 
 @Module({

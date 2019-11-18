@@ -12,7 +12,7 @@ services:
       RDS_PORT: 5432
       RDS_USERNAME: developer
       RDS_PASSWORD: developer
-      RDS_DATABASE: task_managmenent
+      RDS_DATABASE: moneyexchange
       TYPEORM_SYNC: 'true'
       PORT: 3000
     ports:

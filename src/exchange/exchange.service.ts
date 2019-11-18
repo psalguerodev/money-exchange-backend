@@ -1,4 +1,4 @@
-import { HttpService, Injectable, Logger } from '@nestjs/common';
+import { HttpService, Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as config from 'config';
 import { throwError } from 'rxjs';
 import { catchError, map, retry, timeout } from 'rxjs/operators';
@@ -35,7 +35,8 @@ export class ExchangeService {
         map(ammountTo =>
           new GetMonenyResponseDto(getExchangeDto.currency, getExchangeDto.currencyTo, `${getExchangeDto.amount}`, ammountTo)),
         catchError((error) => throwError(error.message)))
-      .toPromise();
+      .toPromise()
+      .catch(error => { throw new InternalServerErrorException(error.meesage); });
   }
 
 }
