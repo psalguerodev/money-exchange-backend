@@ -3,7 +3,7 @@ export class GetMonenyResponseDto {
   constructor(
     private currency: CurrencyType,
     private currencyTo: CurrencyType,
-    private ammountCurrency: string,
-    private ammountCurrencyTo: string,
+    private amountCurrency: string,
+    private amountCurrencyTo: string,
   ) {}
 }
